@@ -1,17 +1,10 @@
 # ASL3-Auto-Connect-To-Hub
 If you've ever wanted to have your node automatically connect to your favorite hub this method works.
 # ASL3 AutoLink (Auto-Reconnect)
-# ASL3 AutoLink
 
 Auto-connect and auto-reconnect helper for AllStarLink / ASL3 nodes.
 
 ## Install
-
-```bash
-git clone https://github.com/ElectricalFlo/asl3-autolink.git
-cd asl3-autolink
-sudo bash install.sh
-
 
 ## 📌 How Configuration Works (IMPORTANT)
 
@@ -26,7 +19,7 @@ All configuration is done **locally on your ASL3 node after installation**.
 
 ### 1️⃣ Clone and install (run on your ASL3 node)
 ```bash
-git clone https://github.com/YOURUSERNAME/asl3-autolink.git
+git clone https://github.com/ElectricalFlo/asl3-autolink.git
 cd asl3-autolink
 sudo bash install.sh
 This does the following:

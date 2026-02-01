@@ -1,108 +1,82 @@
-### Step One: Make sure you have git installed on your node
-````bash
-sudo apt update
-sudo apt install -y git
-````
-Verify that git is installed
-````bash
-git --version
-````
-You should see something like this
-````bash
-git version 2.xx.x
-````
+# ASL3 AutoLink (Auto-connect + Auto-reconnect)
 
+Auto-connect and auto-reconnect helper for AllStarLink / ASL3 nodes using systemd.
 
-Auto-connect and auto-reconnect helper for AllStarLink / ASL3 nodes.
-
-## Install
-
-
-All configuration is done **locally on your ASL3 node after installation**.
+**Nothing is configured on GitHub.**  
+All configuration is done **locally on your ASL3 node** after installation.
 
 ---
 
-## 🔄 What actually happens (step by step)
+## Step 0: Make sure `git` is installed (run on your ASL3 node)
 
-### 1️⃣ Clone and install (run on your ASL3 node)
 ```bash
+sudo apt update
+sudo apt install -y git
+````
+Verify:
+````bash
+git --version
+````
+You should see something like: 
+````bash
+git version 2.xx.x
+````
+Install (rin on your ASL3 Node)
+````bash
 git clone https://github.com/ElectricalFlo/ASL3-Auto-Connect-and-Reconnect-To-Hub.git
 cd ASL3-Auto-Connect-and-Reconnect-To-Hub
 sudo bash install.sh
-
 ````
-This does the following:
+This installs:
 
-Installs the auto-link script
+the auto-link script to /usr/local/sbin/asl3-autolink.sh
 
-Installs the systemd service
+the systemd service to /etc/systemd/system/asl3-autolink.service
 
-Creates a local config file at /etc/asl3-autolink.conf
+a local config file at /etc/asl3-autolink.conf (if it doesn’t already exist)
 
-⚠️ At this point, nothing is configured yet.
+At this point, your node numbers may still be placeholders until you configure them.
 
-2️⃣ Edit your local configuration file
+Configure (run on your ASL3 node)
 
-Now configure it on your node:
+Edit your local config:
 ````bash
 sudo nano /etc/asl3-autolink.conf
 ````
 You will see something like:
-
+````bash
 LOCAL_NODE="681970"
 TARGET_NODE="12345"
 CONNECT_CODE="*3"
-Change the values to match your own node numbers, for example:
+````
+Change to match your setup, for example:
+````bash
+LOCAL_NODE="681970"
+TARGET_NODE="55862"
+CONNECT_CODE="*3"
+````
+save and exit.
 
-LOCAL_NODE="YOUR NODE NUMBER"
-TARGET_NODE="THE HUB YOU WANT TO AUTO CONNECT TO"
+### IMPORTANT: Restart the service after editing the config
 
-Save and exit.
+The service reads /etc/asl3-autolink.conf only when it starts.
+After you edit the config, restart it:
 
-
-🔍 Check status and logs
+````bash
+sudo systemctl restart asl3-autolink.service
+````
+Check status and logs
 ````bash
 sudo systemctl status asl3-autolink.service --no-pager
 sudo journalctl -u asl3-autolink.service -f
 ````
-🗣 One-sentence summary
-Run the installer from GitHub, then edit /etc/asl3-autolink.conf on your node to set your node numbers.
-
-### IF YOU WOULD LIKE TO UNINSTALL
-## 🧹 Uninstall ASL3 AutoLink
-
-To completely remove ASL3 AutoLink from your node, run the following commands
-**on your ASL3 node**.
-
----
-
-### 1️⃣ Stop and disable the service
-```bash
-sudo systemctl disable --now asl3-autolink.service
+If you still see YOURNODENUMBER in the logs, your config wasn’t loaded yet — restart the service again:
+````bash
+sudo systemctl restart asl3-autolink.service
 ````
-2️⃣ Remove installed files
-````bash
-sudo rm -f /etc/systemd/system/asl3-autolink.service
-sudo rm -f /usr/local/sbin/asl3-autolink.sh
-sudo rm -f /etc/asl3-autolink.conf
-````  
+###Congrats! You have successfully congigured your node to automatically connect to your favorite hub/node
 
-⚠️ This removes your local configuration file as well.
-
-3️⃣ Reload systemd
+You can alwasys configure your asl3-autolink.conf to change what node/hub you autoconnect to.
 ````bash
-sudo systemctl daemon-reload
-````  
-4️⃣ (Optional) Remove the cloned repository
-
-If you no longer want the source files on your node:
-````bash
-cd ~
-rm -rf ASL3-Auto-Connect-and-Reconnect-To-Hub
-````  
-🔍 Verify removal (optional)
-````bash
-systemctl list-unit-files | grep asl3
-````  
-
-If nothing is returned, ASL3 AutoLink has been fully removed.
+sudo nano /etc/asl3-autolink.conf
+````
